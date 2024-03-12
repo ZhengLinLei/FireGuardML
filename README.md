@@ -28,7 +28,7 @@ import os
 model = YOLO('./FireGuardBestModel.pt')
 
 # Leer las clases
-classnames = ['fire', 'smoke', 'neutral']
+classnames = ['fire', 'neutral', 'smoke']
 
 # Crear un directorio para guardar las imágenes procesadas
 os.makedirs('../tmp', exist_ok=True)
