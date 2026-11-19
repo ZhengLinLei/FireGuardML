@@ -1,3 +1,6 @@
 .zip
 data
 tmp
+/runs/
+yolo26s.pt
+build

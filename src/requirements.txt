@@ -1,3 +1,2 @@
-ultralytics==8.1.27
-opencv-python==4.9.0.80
-yolov8==0.0.2
+ultralytics==8.4.215
+PyYAML>=6

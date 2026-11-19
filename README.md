@@ -1,6 +1,7 @@
 # FireGuard Machine Learning AI
 
-Fireguard is a machine learning Artificial Intelligent trained with Yolov8 to detect **Fire** and **Smokes** from pictures.
+FireGuardML uses [Ultralytics YOLO26s](https://docs.ultralytics.com/models/yolo26/) to train a fire and smoke detector on images.
+
 
 For this project you have two options:
 * Use pre-trained model in release, check **Model**
@@ -8,7 +9,7 @@ For this project you have two options:
 
 ## Table of Contents
 1. [Model](#model)
-2. [Train](#todel)
+2. [Train](#train)
 
 
 --------------------------
@@ -18,6 +19,9 @@ For this project you have two options:
 If you want to use the model directly without training your own model, download the `FireGuardBestModel.pt` or `FireGuardLastModel.pt` from [release](https://github.com/ZhengLinLei/FireGuardML/releases/)
 
 ### Usage
+
+Run this example from `src/` with JPEG images in `img/` at the repository root. Update the checkpoint path if training printed a different run directory.
+
 ```python
 import cv2
 from ultralytics import YOLO
@@ -74,80 +78,32 @@ for image_path in images:
 
 ## Train
 
-If you have enough time or you want to include custom data to train your own AI model, you can choose from
-1. Train in Google colab (recommended)
-2. Train in your machine
+Download `D-Fire-datasets.zip` from [release v1](https://github.com/ZhengLinLei/FireGuardML/releases/tag/v1). The archive contains the [Roboflow Fire dataset, version 8](https://universe.roboflow.com/custom-thxhn/fire-wrpgm/dataset/8), licensed under CC BY 4.0.
 
-You can find the datasets from [release](https://github.com/ZhengLinLei/FireGuardML/releases/)
+Training starts from the Ultralytics `yolo26s.pt` weights and uses 25 epochs and an image size of 416 by default.
 
+### Google Colab
 
-### Google colab
+1. Open [FireGuardML_Train.ipynb](./src/FireGuardML_Train.ipynb) in Colab, select a GPU runtime, and run the cells. The notebook downloads the dataset ZIP from GitHub automatically.
+2. The notebook prints the path to `best.pt` and uses it for the final prediction. Download the checkpoint from Colab before disconnecting to keep a copy.
+3. Run **Download the updated `doc/` files** to download `FireGuardML-YOLO26s-doc.zip`. Extract the ZIP at the repository root to replace the files in `doc/` with the plots, metrics, and example images from your run.
 
-#### Dowload dataset and import to drive
+To use Google Drive, upload the extracted `D-Fire-datasets` folder to **My Drive** and uncomment the three Google Drive lines in the dataset cell. The notebook then reads the dataset and saves the training results in Drive.
 
-To train the model in Google colab, be sure to have the datasets installed and uploaded to your Google drive with this name `~/D-Fire-datasets`. And check if you have this file branch
+### Local machine
 
-```
-📁 D-Fire-datasets
-    |
-    \-----> 📁 fire
-                 |
-                 |----> 📁 test
-                 |         |
-                 |         |---> 📁 images (images)
-                 |         \---> 📁 labels (txt)
-                 |
-                 |----> 📁 train
-                 |         |
-                 |         |---> 📁 images (images)
-                 |         |---> 📁 labels (txt)
-                 |         \---> 📄 labels.cache
-                 |
-                 |----> 📁 train
-                 |         |
-                 |         |---> 📁 images (images)
-                 |         |---> 📁 labels (txt)
-                 |         \---> 📄 labels.cache
-                 |
-                 \---> 📄 data.yaml
-                 
-```
-
-### Download Colab file 
-
-Donwload the source file from `./src/FireGuardML_Train.ipynb` and import it to google colab. **Be sure to enable GPU**
-
-
--------
-
-### Own Machine
-
-#### Installation
-Go to `src/` and install dependecies
+Extract the archive into `data/` at the repository root so that `data/D-Fire-datasets/fire/train/images` exists. Run these commands from the repository root.
 
 ```bash
-python3 -m pip install -r requirements.txt
+python3 -m pip install -r src/requirements.txt
+./src/setup.sh
 ```
 
-#### Download datasets
+The script writes the dataset configuration to `data/fireguard-local.yaml`. Pass `--data /path/to/data.yaml` to use your own Ultralytics dataset configuration. Training prints the path to its best checkpoint under `runs/detect/`.
 
-Down load the dataset from [release](https://github.com/ZhengLinLei/FireGuardML/releases/) and decompress it inside `./data` folder
+## Training results
 
-
-#### Usage
-
-To train the model, execute the file `./src/setup.sh` inside `./src/context`
-
-```bash
-cd src
-./setup.sh
-```
-
-
-----------------------------------------------------------------------------
-
-
-## Information
+The original plots were generated with YOLOv8s. The Colab download lets you replace them with results from your YOLO26s run.
 
 ![Results](./doc/results.png)
 ![Confusion](./doc/confusion_matrix_normalized.png)
@@ -162,4 +118,4 @@ cd src
 
 
 
- <p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/ZhengLinLei/FireGuardML">FireGuardML</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://github.com/ZhengLinLei">Zheng Lin Lei</a> is licensed under <a href="http://creativecommons.org/licenses/by-nc/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-NC 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1"></a></p> 
+ <p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/ZhengLinLei/FireGuardML">FireGuardML</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://github.com/ZhengLinLei">Zheng Lin Lei</a> is licensed under <a href="http://creativecommons.org/licenses/by-nc/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-NC 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1"></a></p>
